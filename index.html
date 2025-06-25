@@ -1,120 +1,14 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>🧠 BrainCraft</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f8ff;
-      text-align: center;
-    }
-
-    canvas {
-      border: 2px solid #007acc;
-      background-color: white;
-      margin-top: 20px;
-    }
-
-    #infoBox {
-      margin-top: 15px;
-      padding: 10px;
-      background-color: #e6f2ff;
-      color: #003366;
-      display: inline-block;
-    }
-  </style>
+  <title>🧠 BrainCraft - بناء النيورون</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <h1>🧠 BrainCraft - بناء خلية عصبية</h1>
+<body dir="rtl">
+  <h1>BrainCraft - بناء خلية عصبية</h1>
   <canvas id="gameCanvas" width="800" height="600"></canvas>
   <div id="infoBox">اسحب الأجزاء وضعها في أماكنها الصحيحة</div>
-
-  <script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-
-    let draggedPart = null;
-
-    const neuronParts = [
-      { name: "جسم الخلية", x: 400, y: 300, placed: false },
-      { name: "Axon", x: 500, y: 300, placed: false },
-      { name: "Dendrites", x: 300, y: 300, placed: false }
-    ];
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // خطوط الإرشاد
-      ctx.setLineDash([5]);
-      ctx.strokeStyle = "#999";
-      ctx.strokeRect(380, 280, 40, 40); // جسم الخلية
-      ctx.strokeRect(480, 280, 40, 40); // Axon
-      ctx.strokeRect(280, 280, 40, 40); // Dendrites
-      ctx.setLineDash([]);
-
-      // رسم الأجزاء
-      neuronParts.forEach(part => {
-        ctx.fillStyle = part.placed ? "#aaa" : "#007acc";
-        ctx.fillRect(part.x, part.y, 40, 40);
-        ctx.fillStyle = "#fff";
-        ctx.font = "12px Arial";
-        ctx.fillText(part.name.charAt(0), part.x + 15, part.y + 25);
-      });
-    }
-
-    canvas.addEventListener("mousedown", e => {
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-
-      neuronParts.forEach(part => {
-        if (!part.placed &&
-            mouseX > part.x && mouseX < part.x + 40 &&
-            mouseY > part.y && mouseY < part.y + 40) {
-          draggedPart = part;
-        }
-      });
-    });
-
-    canvas.addEventListener("mousemove", e => {
-      if (draggedPart) {
-        const rect = canvas.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-        draggedPart.x = mouseX - 20;
-        draggedPart.y = mouseY - 20;
-        draw();
-      }
-    });
-
-    canvas.addEventListener("mouseup", () => {
-      if (draggedPart) {
-        // التحقق من المكان الصحيح
-        if (draggedPart.name === "جسم الخلية" &&
-            draggedPart.x > 370 && draggedPart.x < 390) {
-          draggedPart.placed = true;
-        } else if (draggedPart.name === "Axon" &&
-            draggedPart.x > 470 && draggedPart.x < 490) {
-          draggedPart.placed = true;
-        } else if (draggedPart.name === "Dendrites" &&
-            draggedPart.x > 270 && draggedPart.x < 290) {
-          draggedPart.placed = true;
-        }
-
-        draggedPart = null;
-        draw();
-
-        if (neuronParts.every(p => p.placed)) {
-          document.getElementById("infoBox").innerHTML = `
-            🎉 رائع! لقد بنيت خلية عصبية كاملة!<br>
-            <button onclick="alert('مبروك!')">تم</button>
-          `;
-        }
-      }
-    });
-
-    draw();
-  </script>
+  <script src="game.js"></script>
 </body>
 </html>
