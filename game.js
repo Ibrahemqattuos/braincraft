@@ -4,14 +4,23 @@ const ctx = canvas.getContext("2d");
 let currentLevel = 1;
 let score = 0;
 
+// الصور المدمجة بصيغة Base64
+const neuronImages = {
+  "جسم الخلية": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAA...",
+  "المحور (Axon)": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAA...",
+  "الشجرة العصبية": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAA...",
+  "الغشاء المايليني": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAA...",
+  "التشابك العصبي": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAA..."
+};
+
 // بيانات المستويات مع الصور
 const levels = [
   {
     title: "مستوى 1: جسم الخلية والعصبون",
     parts: [
-      { name: "جسم الخلية", img: "assets/neuron-parts/cell-body.png", x: 400, y: 300, placed: false, correctX: 380, correctY: 280 },
-      { name: "المحور (Axon)", img: "assets/neuron-parts/axon.png", x: 500, y: 300, placed: false, correctX: 480, correctY: 280 },
-      { name: "الشجرة العصبية", img: "assets/neuron-parts/dendrites.png", x: 300, y: 300, placed: false, correctX: 280, correctY: 280 }
+      { name: "جسم الخلية", x: 400, y: 300, placed: false, correctX: 380, correctY: 280 },
+      { name: "المحور (Axon)", x: 500, y: 300, placed: false, correctX: 480, correctY: 280 },
+      { name: "الشجرة العصبية", x: 300, y: 300, placed: false, correctX: 280, correctY: 280 }
     ],
     info: {
       "جسم الخلية": "هو مركز الخلية ويحتوي على النواة.",
@@ -22,8 +31,8 @@ const levels = [
   {
     title: "مستوى 2: الغشاء المايليني والتشابك",
     parts: [
-      { name: "الغشاء المايليني", img: "assets/neuron-parts/myelin.png", x: 550, y: 300, placed: false, correctX: 530, correctY: 280 },
-      { name: "التشابك العصبي", img: "assets/neuron-parts/synapse.png", x: 600, y: 300, placed: false, correctX: 580, correctY: 280 }
+      { name: "الغشاء المايليني", x: 550, y: 300, placed: false, correctX: 530, correctY: 280 },
+      { name: "التشابك العصبي", x: 600, y: 300, placed: false, correctX: 580, correctY: 280 }
     ],
     info: {
       "الغشاء المايليني": "يحمي المحور العصبي ويسرع من نقل الإشارة.",
@@ -34,14 +43,13 @@ const levels = [
 
 let draggedPart = null;
 let imagesLoaded = 0;
-
-// تحميل الصور
 const images = {};
+
 function loadImages() {
   levels.forEach((level, i) => {
     level.parts.forEach(part => {
       const img = new Image();
-      img.src = part.img;
+      img.src = neuronImages[part.name];
       img.onload = () => {
         images[part.name] = img;
         imagesLoaded++;
